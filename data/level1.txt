@@ -2,13 +2,5 @@ towerPos x 200 y 100
 towerPos x 400 y 300
 towerPos x 400 y 100
 totalWaves total 3
-<<<<<<< HEAD
-wave waveNum 1 enemyType 1 numberOfEnemies 3 entrance 2 delay 10 level 3
-wave waveNum 1 enemyType 2 numberOfEnemies 2 entrance 2 delay 5 level 3
-wave waveNum 1 enemyType 1 numberOfEnemies 5 entrance 2 delay 5 level 3
-wave waveNum 1 enemyType 1 numberOfEnemies 7 entrance 2 delay 20 level 3
-wave waveNum 1 enemyType 1 numberOfEnemies 10 entrance 2 delay 40 level 3
-=======
-wave waveNum 1 enemyType 1 numberOfEnemies 50 entrance 2 delay 10 level 3
-wave waveNum 1 enemyType 1 numberOfEnemies 50 entrance 2 delay 10 level 3
->>>>>>> vlads/master
+wave waveNum 1 enemyType 1 numberOfEnemies 5 entrance 2 delay 10 level 3
+wave waveNum 1 enemyType 1 numberOfEnemies 0 entrance 2 delay 10 level 3

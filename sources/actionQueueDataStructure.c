@@ -125,11 +125,11 @@ int pushToQueue(ActionQueueStructure queue, cmdType command, cmdOption option, i
 
 void testPushToQueue()	{
 	
-    cmdType nCommand_1=upgrade;
+    cmdType nCommand_1=cmd_upgrade;
     cmdOption nStat_1=upgrade_power;
     int tar_1 = 1;
 
-    cmdType nCommand_2=execute;
+    cmdType nCommand_2=cmd_execute;
     cmdOption nStat_2=upgrade_range;
     int tar_2 = 2;
 
@@ -138,9 +138,9 @@ void testPushToQueue()	{
 
 	sput_fail_unless(pushToQueue(newQueue,nCommand_1,nStat_1,tar_1) == 1,"Valid: 1 Queue Item");
 	sput_fail_unless(pushToQueue(newQueue,nCommand_2,nStat_2,tar_2) == 2,"Valid: 2 Queue Items");
-	sput_fail_unless(getFirstCommand(newQueue) == upgrade,"Valid: Top of Queue Command");
+	sput_fail_unless(getFirstCommand(newQueue) == cmd_upgrade,"Valid: Top of Queue Command");
 	sput_fail_unless(getFirstOption(newQueue) == upgrade_power,"Valid: Top of Queue Option");
-	sput_fail_unless(getLastCommand(newQueue) == execute,"Valid: Last of Queue Command");
+	sput_fail_unless(getLastCommand(newQueue) == cmd_execute,"Valid: Last of Queue Command");
 	sput_fail_unless(getLastOption(newQueue) == upgrade_range,"Valid: Last of Queue Option");
 	addMemory(10);
 
@@ -203,15 +203,15 @@ int calulateCosts(cmdType cmd, cmdOption opt, int target)    {
 
     switch(cmd)
     {
-        case upgrade:
+        case cmd_upgrade:
         {
             return ((getTowerLevel(target))*getCurrentStat(opt,target));
         }
-        case mktwr:
+        case cmd_mktwr:
         {
             return getCostOfNewTower();
         }
-        case aptget:
+        case cmd_aptget:
         {
             return getCostOfAptget(opt);
         }
@@ -273,6 +273,7 @@ cmdOption upgradeTowerStat(cmdOption stat, int target)  {
             if(upgradeDmg(target))  {
                 return upgrade_power;
             }
+
         }
         case upgrade_range:
         {
@@ -301,7 +302,6 @@ cmdOption upgradeTowerStat(cmdOption stat, int target)  {
         default:
             fprintf(stderr,"upgradeTowerStat tower.c: unrecognised stat\n");
             return optionError;
-
     }
 }
 /*
@@ -314,7 +314,7 @@ int popToTower()	{
 	if(queue->start != NULL) {
 		needed = calulateCosts(queue->start->command,queue->start->option,queue->start->target);
 		switch(queue->start->command)	{
-			case upgrade:
+			case cmd_upgrade:
 				if (checkQueue(queue, Game,needed)) {
 					ActionQueueStructure queue = getQueue(NULL);
 					GameProperties Game = getGame(NULL);
@@ -323,7 +323,7 @@ int popToTower()	{
 					removeQueueItem();
 				}
 				break;
-			case mktwr:
+			case cmd_mktwr:
 				//! request tower type ignored for now.
 				if (checkQueue(queue,Game,needed)) {
 					createTowerFromPositions(queue->start->target);
@@ -430,19 +430,19 @@ char *getActionQueueString(void) {
         int target = p->target;
         
         switch(command) {
-            case upgrade:
+            case cmd_upgrade:
                 strcat(outputString, "upgrade");
                 break;
-            case execute:
+            case cmd_execute:
                 strcat(outputString, "execute");
                 break;
-            case set:
+            case cmd_set:
                 strcat(outputString, "set");
                 break;
-            case mktwr:
+            case cmd_mktwr:
                 strcat(outputString, "aptget");
                 break;
-            case aptget:
+            case cmd_aptget:
                 strcat(outputString, "mktwr");
                 break;
             default:

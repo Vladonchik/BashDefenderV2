@@ -238,7 +238,7 @@ int getHealth(GameProperties game)	{
  */
 int checkIfPlayerDead()   {
 
-    if(!getHealth(getGame(NULL)))   {
+    if(getHealth(getGame(NULL)) <= 0)   {
         return 1;
     }
     

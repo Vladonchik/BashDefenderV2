@@ -8,16 +8,17 @@
 /*----------Enumerated Types-----------*/
 enum cmdType
 {
-    commandError=-1,
-    upgrade=1,
-    execute=2,
-    set=3,
-    man=4,
-    cat=5,
-    mktwr=6,
-    aptget=7,
-    ps=8,
-   // kill=9
+
+    cmd_commandError=-1,
+    cmd_upgrade=1,
+    cmd_execute=2,
+    cmd_set=3,
+    cmd_man=4,
+    cmd_cat=5,
+    cmd_mktwr=6,
+    cmd_aptget=7,
+    cmd_ps=8,
+    cmd_kill=9
 };
 
 

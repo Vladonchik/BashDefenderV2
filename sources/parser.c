@@ -55,7 +55,7 @@ int parse(char *inputString)
     //enumerated type cmdType can describe each of the possible commands(see actionQueue.h)
     cmdType command = getCommandType(commandArray[0]);//the first string in the command should contain the action
 
-    if(command==commandError)//if getAction returns commandError then the input is invalid
+    if(command==cmd_commandError)//if getAction returns commandError then the input is invalid
     {                //Error messaging handled in getAction function
         freeCommandArray(commandArray, numberOfChunks);
         return 0;
@@ -65,7 +65,7 @@ int parse(char *inputString)
     /**** Now we deal with each possible command separately as they all have different syntax ****/
     switch (command)
     {
-        case upgrade:
+        case cmd_upgrade:
         {
             if(numberOfChunks!=3) {
                 optionUsageError();
@@ -77,7 +77,7 @@ int parse(char *inputString)
             break;
 
         }
-        case cat:
+        case cmd_cat:
         {
             if(numberOfChunks!=2) {
                 optionUsageError();
@@ -89,7 +89,7 @@ int parse(char *inputString)
             break;
 
         }
-        case man:
+        case cmd_man:
         {
             if(numberOfChunks!=2) {
                 optionUsageError();
@@ -101,7 +101,7 @@ int parse(char *inputString)
             break;
 
         }
-        case mktwr:
+        case cmd_mktwr:
         {
             if(numberOfChunks!=3)
             {
@@ -114,7 +114,7 @@ int parse(char *inputString)
             break;
 
         }
-        case aptget:
+        case cmd_aptget:
         {
             if(numberOfChunks!=2) {
                 optionUsageError();
@@ -126,7 +126,7 @@ int parse(char *inputString)
             break;
 
         }
-        case ps:
+        case cmd_ps:
         {
             if(numberOfChunks!=2) {
                 optionUsageError();
@@ -138,13 +138,19 @@ int parse(char *inputString)
             }
             break;
         }
-        case commandError:
+        case cmd_kill:
+        {
+            parseKill(commandArray, numberOfChunks);
+            break;
+
+        }
+        case cmd_commandError:
         {
             printf("command was not read\n");
             break;
         }
-        case execute:
-        case set:
+        case cmd_execute:
+        case cmd_set:
         default:
             fprintf(stderr,"\n***parsing not implemented yet returning***\n");
             specificReturns = 0;
@@ -249,7 +255,7 @@ int parseAptget(char * aptToGetString)
         fprintf(stderr,"type man aptget to see availible apps\n");
         return 0;
     }
-    if(pushToQueue(getQueue(NULL),aptget,aptToGet,0)>=1)
+    if(pushToQueue(getQueue(NULL),cmd_aptget,aptToGet,0)>=1)
     {
         printf("pushing tower to queue\n");
         return 1;
@@ -274,7 +280,7 @@ int parseMktwr(char ** commandArray)
         return 0;
     }
     
-    if(pushToQueue(getQueue(NULL),mktwr,twrType,towerPosition)>=1)
+    if(pushToQueue(getQueue(NULL),cmd_mktwr,twrType,towerPosition)>=1)
     {
 		printf("pushing tower to queue\n");
         return 1;
@@ -291,32 +297,32 @@ int parseMan(char * inputStringCommandMan)
     cmdType commandToMan = getCommandType(inputStringCommandMan);
     switch (commandToMan)
     {
-        case upgrade:
+        case cmd_upgrade:
         {
             manUpgrade();
             return 1;
         }
-        case cat:
+        case cmd_cat:
         {
             manCat();
             return 1;
         }
-        case man:
+        case cmd_man:
         {
             manMan();
             return 1;//0 for error
         }
-        case execute:
+        case cmd_execute:
         {
             //manExecute();
             return 1;
         }
-        case set:
+        case cmd_set:
         {
             //manSet();
             return 1;
         }
-        case mktwr:
+        case cmd_mktwr:
         {
             return 1;
         }
@@ -374,7 +380,7 @@ int parseUpgrade(char ** commandArray, int numberOfChunks)
     
     if(target!=0 && statToUpgrade<=5 && statToUpgrade!=optionError )
     {
-        cmdType action = upgrade;
+        cmdType action = cmd_upgrade;
         if(pushToQueue(getQueue(NULL),action,statToUpgrade,target)>=1)
             //push to queue returns number of items on queue
             return 1;
@@ -527,7 +533,7 @@ cmdType getCommandType(char * firstToken )
     }
     stringList * commandList = getCommandList(NULL);
     //now test the input string against all valid actions
-    cmdType command = commandError;
+    cmdType command = cmd_commandError;
     for(int i=1; i<=commandList->numberOfStrings; ++i)
     {
         if(strcmp(firstToken,commandList->stringArray[i])==0)//if the string is identical to one of the commands
@@ -535,38 +541,38 @@ cmdType getCommandType(char * firstToken )
             switch (i)
             {
                 case 1:
-                    command = upgrade;
+                    command = cmd_upgrade;
                     break;
                 case 2:
-                    command = execute;
+                    command = cmd_execute;
                     break;
                 case 3:
-                    command = set;
+                    command = cmd_set;
                     break;
                 case 4:
-                    command = man;
+                    command = cmd_man;
                     break;
                 case 5:
-                    command = cat;
+                    command = cmd_cat;
                     break;
                 case 6:
-                    command = mktwr;
+                    command = cmd_mktwr;
                     break;
                 case 7:
-                    command = aptget;
+                    command = cmd_aptget;
                     break;
                 case 8:
-                    command = ps;
+                    command = cmd_ps;
                     break;
-//                case 9:
-//                    command = kill;
-//                    break;
+                case 9:
+                    command = cmd_kill;
+                    break;
             }
             break;
         }
     }
     
-    if(command==commandError)//if it is still set to ERROR then the user made a mistake
+    if(command==cmd_commandError)//if it is still set to ERROR then the user made a mistake
     {
         actionUsageError(firstToken);
     }
@@ -709,8 +715,8 @@ stringList * intialiseCommandList()
     /* make an array of strings to hold all the possible action commands*/
     static char **validActions;
     int numberOfActions=9;//have 5 action commands at this time: upgrade, execute, set, man, cat
-    validActions=malloc((numberOfActions+1)*sizeof(char*));//array of $[numberOfActions] strings
-    //validActions-=1;
+    validActions=malloc((numberOfActions)*sizeof(char*));//array of $[numberOfActions] strings
+    validActions-=1;
     validActions[1]=strdup("upgrade");
     validActions[2]=strdup("execute");
     validActions[3]=strdup("set");
@@ -734,8 +740,8 @@ stringList * intialiseOptionList()
     /*first lets make an array of strings to hold all the possible action commands*/
     char **validOptions;
     int numberOfOptions=12;//have 5 action commands at this time: upgrade, execute, set, man, cat
-    validOptions=malloc((numberOfOptions+1)*sizeof(char*));    //upgrade opts
-                                                               //validOptions-=1;
+    validOptions=malloc((numberOfOptions)*sizeof(char*));    //upgrade opts
+    validOptions-=1;
     validOptions[1]=strdup("p");
     validOptions[2]=strdup("r");
     validOptions[3]=strdup("s");

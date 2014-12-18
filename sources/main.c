@@ -77,13 +77,14 @@ int main(int argc, char ** argv)
         drawRect(10, 10, 150, 150, 80, 10, 100, 100);
         endFrame(d);
         
-//        ended = checkIfPlayerDead();
-//        while (ended) {
-//            //final screen returns 1 if restart button was pressed...
-//            if (final_screen()){
-//                ended = 0;
-//            }
-//        }
+        ended = checkIfPlayerDead();
+        while (ended) {
+            //final screen returns 1 if restart button was pressed...
+            //if (final_screen()){
+            //    ended = 0;
+            //}
+            final_screen();
+        }
         
     } while(!terminal_window(d, pass, clear));
     

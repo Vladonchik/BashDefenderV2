@@ -111,7 +111,6 @@ Display init_SDL(){
     init_pic(&d->terminalWindowTexture, "Images/terminalwindow.png");
     init_pic(&d->map, "Images/map1.png");
     init_pic(&d->towerPoistionTexture, "Images/TowerLocationsA.png");
-    init_pic(&d->enemyTexture[0], "Images/sdl2-spritesheet-actual.png");
     init_pic(&d->enemyTexture[1], "Images/aniStrip.png");
     init_pic(&d->towerTexture[0], "Images/tower.png");
     init_pic(&d->towerTexture[1], "Images/tower1.png");
@@ -507,37 +506,37 @@ int final_screen()
     Display d = getDisplayPointer(NULL);
     SDL_Delay(20);
 
-        animateAnyPic(0, 0, SCREEN_WIDTH_GLOBAL, SCREEN_HEIGHT_GLOBAL, 3072, 645, 3, 150, d->finalBackgroundTexture);
+    animateAnyPic(0, 0, SCREEN_WIDTH_GLOBAL, SCREEN_HEIGHT_GLOBAL, 3072, 645, 3, 150, d->finalBackgroundTexture);
         
-        d->rect = (SDL_Rect) {(SCREEN_WIDTH_GLOBAL/2) - ((SCREEN_HEIGHT_GLOBAL/6)/2), (SCREEN_HEIGHT_GLOBAL/3)*2, SCREEN_HEIGHT_GLOBAL/6, SCREEN_HEIGHT_GLOBAL/6};
+    d->rect = (SDL_Rect) {(SCREEN_WIDTH_GLOBAL/2) - ((SCREEN_HEIGHT_GLOBAL/6)/2), (SCREEN_HEIGHT_GLOBAL/3)*2, SCREEN_HEIGHT_GLOBAL/6, SCREEN_HEIGHT_GLOBAL/6};
         
-        SDL_RenderCopy(d->renderer, d->reStartButton, NULL, &d->rect);
-        SDL_RenderPresent(d->renderer);
-        int check = 0;
-        check = (SDL_PollEvent(&d->event));
-        if(check != 0)
+    SDL_RenderCopy(d->renderer, d->reStartButton, NULL, &d->rect);
+    SDL_RenderPresent(d->renderer);
+    int check = 0;
+    check = (SDL_PollEvent(&d->event));
+    if(check != 0)
+    {
+        switch(d->event.type)
         {
-            switch(d->event.type)
+            case SDL_MOUSEBUTTONDOWN:
             {
-                case SDL_MOUSEBUTTONDOWN:
-                {
-                    if(d->event.button.x >= (SCREEN_WIDTH_GLOBAL/2) - ((SCREEN_HEIGHT_GLOBAL/6)/2) && d->event.button.x <= (SCREEN_WIDTH_GLOBAL/2) - ((SCREEN_HEIGHT_GLOBAL/6)/2) + SCREEN_WIDTH_GLOBAL/6 && d->event.button.y >= (SCREEN_HEIGHT_GLOBAL/3)*2 &&  d->event.button.y <= (SCREEN_HEIGHT_GLOBAL/3)*2 + SCREEN_HEIGHT_GLOBAL/6)
+                if(d->event.button.x >= (SCREEN_WIDTH_GLOBAL/2) - ((SCREEN_HEIGHT_GLOBAL/6)/2) && d->event.button.x <= (SCREEN_WIDTH_GLOBAL/2) - ((SCREEN_HEIGHT_GLOBAL/6)/2) + SCREEN_WIDTH_GLOBAL/6 && d->event.button.y >= (SCREEN_HEIGHT_GLOBAL/3)*2 &&  d->event.button.y <= (SCREEN_HEIGHT_GLOBAL/3)*2 + SCREEN_HEIGHT_GLOBAL/6)
                         if(d->event.button.button == SDL_BUTTON_LEFT){
                             return 1;
                             //SDL_Quit();
                             //shutSDL();
                         }
                 }
-                case SDL_KEYDOWN:
+            case SDL_KEYDOWN:
+            {
+                if(d->event.key.keysym.sym == SDLK_ESCAPE)
                 {
-                    if(d->event.key.keysym.sym == SDLK_ESCAPE)
-                    {
-                        SDL_Quit();
-                        exit(1);
-                    }
+                    SDL_Quit();
+                    exit(1);
                 }
             }
         }
+    }
     return 0;
 }
 

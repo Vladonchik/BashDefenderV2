@@ -17,7 +17,7 @@ enum cmdType
     mktwr=6,
     aptget=7,
     ps=8,
-    kill=9
+   // kill=9
 };
 
 

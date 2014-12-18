@@ -138,12 +138,6 @@ int parse(char *inputString)
             }
             break;
         }
-        case kill:
-        {
-            parseKill(commandArray, numberOfChunks);
-            break;
-
-        }
         case commandError:
         {
             printf("command was not read\n");
@@ -564,9 +558,9 @@ cmdType getCommandType(char * firstToken )
                 case 8:
                     command = ps;
                     break;
-                case 9:
-                    command = kill;
-                    break;
+//                case 9:
+//                    command = kill;
+//                    break;
             }
             break;
         }

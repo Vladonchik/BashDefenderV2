@@ -2,11 +2,11 @@
 
 void init_abilities()
 {
-	static Ability psx, kill, killall;
+	static Ability psx, kill_abil, killall;
 	psx.unlocked = 1;
 	psx.cost = PSX_COST;
-	kill.unlocked = 0;
-	kill.cost = KILL_COST;
+	kill_abil.unlocked = 0;
+	kill_abil.cost = KILL_COST;
 	killall.unlocked = 0;
 	killall.cost = KILLALL_COST;
 }
